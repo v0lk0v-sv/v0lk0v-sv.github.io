@@ -1,0 +1,27 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;  
+    text-align: center;
+    margin: 0 auto; /* Центрирование контейнера по горизонтали */
+    flex-wrap: wrap;
+}
+
+.button {
+    display: block;
+    width: 100%; /* Каждая кнопка занимает 100% ширины контейнера */
+    margin: 2% 0;
+    padding: 3% 5%;
+    font-size: 2vw;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+}
