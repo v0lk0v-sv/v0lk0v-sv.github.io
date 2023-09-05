@@ -20,5 +20,15 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script>
+        var currentURL = window.location.href;
+        if (currentURL.includes("#")) {
+          var parts = currentURL.split("#");
+          var label = parts[1];
+          document.querySelector('a[href="help"]').href = "help#" + label;
+          document.querySelector('a[href="issue"]').href = "issue#" + label;
+          document.querySelector('a[href="sales"]').href = "sales#" + label;
+        }
+      </script>
 </body>
 </html>

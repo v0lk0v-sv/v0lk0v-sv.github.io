@@ -19,11 +19,9 @@
             </div>
             <h5 class="mb-3">Please fill in the fields to report an issue</h5>
             <form id="email-form" name="email-form" method="get" class="form mb-3">
-                <input
-                type="hidden"
-                name="_redirect"
-                value="thanks"
-                />
+                <input type="hidden" name="_redirect" value="thanks"/>
+                <input type="hidden" name="form_type" value="issue"/>
+                <input type="hidden" name="rover" id="roverInput" value=""/>
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="">
@@ -42,18 +40,19 @@
                     <small class="text-muted text-center">By clicking Submit, you agree to the terms of use.</small>
                 </div>
             </form>
-            <div class="form-done">
+            <!-- <div class="form-done">
                 <div class="text-center">Thank you! Your submission has been received!</div>
             </div>
             <div class="form-fail">
                 <div class="text-center">Oops! Something went wrong while submitting the form. Please try again.</div>
-            </div>
+            </div> -->
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script>
+        const labelFromURL = window.location.hash.slice(1);
+        document.getElementById('roverInput').value = labelFromURL;
+    </script>
 </body>
-
 </html>
