@@ -1,5 +1,16 @@
 body, html {
+    color: #282d33;
     font-family: Inter, sans-serif;
     -webkit-font-smoothing: antialiased;
 }
+.text-color {
+    color: #282d33;
+}
 
+.text-bold {
+    font-weight: 600;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
