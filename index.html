@@ -34,7 +34,6 @@
 }
 
 #toolbar.down {
-  transform: translateY(0px); /* Изначальное положение */
   transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -74,63 +73,58 @@
   
 </div>
 <script>
-  const toolbarWrap = document.getElementById('toolbar-wrap');
-  const toolbar = document.getElementById('toolbar');
-  const editor = document.getElementById('editor');
-  
-  // Функция debounce
-  function debounce(func, wait) {
-    let timeout;
-  
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-  
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
+const toolbarWrap = document.getElementById('toolbar-wrap');
+const toolbar = document.getElementById('toolbar');
+const editor = document.getElementById('editor');
+let animationFrameId = null;
+
+// Функция debounce
+function debounce(func, wait, immediate) {
+  let timeout;
+  return function executedFunction() {
+    let context = this, args = arguments;
+    let later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
     };
+    let callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+// Определение функции для использования с requestAnimationFrame
+function animateToolbar() {
+  const newPosition = toolbarWrap.getBoundingClientRect().top;
+  if (newPosition < -1 && !toolbar.classList.contains("down")) {
+    toolbar.classList.add("down");
+    fixPosition = Math.abs(newPosition);
+    toolbar.style.transform = `translateY(${fixPosition}px)`;
+  } else if (newPosition >= -1 && toolbar.classList.contains("down")) {
+    toolbar.classList.remove("down");
+    toolbar.style.transform = 'translateY(0px)';
   }
-  
-  // Если элементы существуют, добавляем логику
-  if (toolbarWrap && toolbar && editor) {
-    let fixPosition = 0;
-  
-    // Устанавливаем transform для toolbar
-    const setTransform = () => {
-      const newPosition = toolbarWrap.getBoundingClientRect().top;
-      if (newPosition < -1) {
-        toolbar.classList.add("down");
-        fixPosition = Math.abs(newPosition);
-        if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-          fixPosition -= 2;
-        }
-        toolbar.style.transform = `translateY(${fixPosition}px)`;
-      } else {
-        toolbar.classList.remove("down");
-        toolbar.style.transform = 'translateY(0px)';
-      }
-    };
-  
-    // Создаем debounced версию setTransform
-    const setTransformDebounced = debounce(setTransform, 150);
-  
-    // Функция, которая показывает toolbar
-    const showToolbar = () => {
-      if (fixPosition > 0) {
-        toolbar.classList.remove("down");
-        fixPosition = 0;
-        toolbar.style.transform = 'translateY(0px)';
-      }
-      setTransformDebounced();
-    };
-  
-    // Добавляем обработчики событий
-    window.addEventListener("scroll", setTransformDebounced);
-    window.addEventListener("resize", setTransformDebounced);
-    editor.addEventListener("blur", showToolbar);
+  animationFrameId = null;
+}
+
+// Функция, вызывающая animateToolbar с использованием requestAnimationFrame
+function requestToolbarAnimation() {
+  if (animationFrameId === null) {
+    animationFrameId = requestAnimationFrame(animateToolbar);
   }
-  </script>  
+}
+
+// Создаем debounced версию requestToolbarAnimation
+const requestToolbarAnimationDebounced = debounce(requestToolbarAnimation, 150);
+
+// Добавляем обработчики событий
+window.addEventListener("scroll", requestToolbarAnimationDebounced);
+window.addEventListener("resize", requestToolbarAnimationDebounced);
+editor.addEventListener("blur", function() {
+  requestAnimationFrame(animateToolbar); // Можно вызвать напрямую, так как blur срабатывает редко
+});
+
+</script>  
 </body>
 </html>
