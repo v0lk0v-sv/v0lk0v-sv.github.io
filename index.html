@@ -34,9 +34,8 @@
 }
 
 #toolbar.down {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 500ms;
+  transform: translateY(0px); /* Изначальное положение */
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .button {
@@ -75,60 +74,63 @@
   
 </div>
 <script>
-const toolbarWrap = document.getElementById('toolbar-wrap');
-const toolbar = document.getElementById('toolbar');
-const editor = document.getElementById('editor');
-
-// Функция debounce
-function debounce(func, wait) {
-  let timeout;
-
-  return function executedFunction(...args) {
-    const later = () => {
+  const toolbarWrap = document.getElementById('toolbar-wrap');
+  const toolbar = document.getElementById('toolbar');
+  const editor = document.getElementById('editor');
+  
+  // Функция debounce
+  function debounce(func, wait) {
+    let timeout;
+  
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+  
       clearTimeout(timeout);
-      func(...args);
+      timeout = setTimeout(later, wait);
     };
-
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-// Если элементы существуют, добавляем логику
-if (toolbarWrap && toolbar && editor) {
-  let fixPosition = 0;
-
-  // Устанавливаем отступ для toolbar
-  const setMargin = () => {
-    const newPosition = toolbarWrap.getBoundingClientRect().top;
-    if (newPosition < -1) {
-      toolbar.classList.add("down");
-      fixPosition = Math.abs(newPosition);
-      if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-        fixPosition -= 2;
+  }
+  
+  // Если элементы существуют, добавляем логику
+  if (toolbarWrap && toolbar && editor) {
+    let fixPosition = 0;
+  
+    // Устанавливаем transform для toolbar
+    const setTransform = () => {
+      const newPosition = toolbarWrap.getBoundingClientRect().top;
+      if (newPosition < -1) {
+        toolbar.classList.add("down");
+        fixPosition = Math.abs(newPosition);
+        if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+          fixPosition -= 2;
+        }
+        toolbar.style.transform = `translateY(${fixPosition}px)`;
+      } else {
+        toolbar.classList.remove("down");
+        toolbar.style.transform = 'translateY(0px)';
       }
-      toolbar.style.marginTop = `${fixPosition}px`;
-    }
-  };
-
-  // Создаем debounced версию setMargin
-  const setMarginDebounced = debounce(setMargin, 150);
-
-  // Функция, которая показывает toolbar
-  const showToolbar = () => {
-    if (fixPosition > 0) {
-      toolbar.classList.remove("down");
-      fixPosition = 0;
-      toolbar.style.marginTop = '0px';
-    }
-    setMarginDebounced();
-  };
-
-  // Добавляем обработчики событий
-  window.addEventListener("scroll", showToolbar);
-  window.addEventListener("resize", showToolbar);
-  editor.addEventListener("blur", showToolbar);
-}
-</script>
+    };
+  
+    // Создаем debounced версию setTransform
+    const setTransformDebounced = debounce(setTransform, 150);
+  
+    // Функция, которая показывает toolbar
+    const showToolbar = () => {
+      if (fixPosition > 0) {
+        toolbar.classList.remove("down");
+        fixPosition = 0;
+        toolbar.style.transform = 'translateY(0px)';
+      }
+      setTransformDebounced();
+    };
+  
+    // Добавляем обработчики событий
+    window.addEventListener("scroll", setTransformDebounced);
+    window.addEventListener("resize", setTransformDebounced);
+    editor.addEventListener("blur", showToolbar);
+  }
+  </script>  
 </body>
 </html>
