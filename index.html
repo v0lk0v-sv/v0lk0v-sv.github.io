@@ -124,6 +124,12 @@ function updateDebugInfo() {
   info += 'InputField is focused: ' + (document.activeElement === inputField) + '<br>';
   // Добавляем положение нижней границы input относительно вьюпорта
   info += 'InputField Rect Bottom: ' + inputRect.bottom + 'px<br>';
+  if (document.activeElement === inputField) {
+    // Обновляем информацию о позиционировании
+    var inputRect = inputField.getBoundingClientRect();
+    info += 'InputField Rect Top update: ' + inputRect.top + 'px<br>';
+    info += 'InputField Rect Bottom update: ' + inputRect.bottom + 'px<br>';
+  }
   debugInfo.innerHTML = info;
 }
 
@@ -137,7 +143,9 @@ inputField.addEventListener('focus', function() {
 });
 
 // Обновление информации при потере фокуса элементом ввода
-inputField.addEventListener('blur', updateDebugInfo);
+inputField.addEventListener('blur', function() {
+  setTimeout(updateDebugInfo, 500);
+});
 
 // Вызов функции для начального отображения диагностической информации
 updateDebugInfo();
