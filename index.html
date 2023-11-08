@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 <title>Site with Fixed Navbar</title>
 <style>
   body {
@@ -70,14 +70,14 @@
 <body>
 
 <!-- Fixed Navbar -->
-<nav class="navbar">
+<nav id="navbar" class="navbar">
   <a href="#">Home</a>
   <a href="#">Features</a>
   <a href="#">Pricing</a>
 </nav>
 
 <!-- Body Content -->
-<div class="container">
+<div id="messageList" class="container">
   <div class="row">
     <div class="col-12">
       <!-- Placeholder text -->
@@ -86,8 +86,8 @@
       </div>
       <!-- Input Form -->
       <form>
-        <div class="form-group">
-          <label for="inputField">Input Label</label>
+        <div id="inputContainer" class="form-group">
+          <label id="debugInfo" for="inputField">Debug Information will be displayed here</label>
           <input type="text" class="form-control" id="inputField" placeholder="Enter text">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -104,6 +104,28 @@
 var navbar = document.getElementById('navbar');
 var messageList = document.getElementById('messageList');
 var inputContainer = document.getElementById('inputContainer');
+
+// Функция для отображения диагностической информации
+function updateDebugInfo() {
+  var info = 'Debug Information:<br>';
+  info += 'Window inner width: ' + window.innerWidth + 'px<br>';
+  info += 'Window inner height: ' + window.innerHeight + 'px<br>';
+  info += 'Navbar offsetTop: ' + navbar.offsetTop + 'px<br>';
+  info += 'InputField offsetTop: ' + inputField.offsetTop + 'px<br>';
+  info += 'InputField is focused: ' + (document.activeElement === inputField);
+  info += 'Viewport height: ' + window.innerHeight + 'px<br>';
+  debugInfo.innerHTML = info;
+}
+
+// Обновление диагностической информации при изменении размера окна
+window.addEventListener('resize', updateDebugInfo);
+
+// Обновление диагностической информации при фокусировке и потере фокуса
+inputField.addEventListener('focus', updateDebugInfo);
+inputField.addEventListener('blur', updateDebugInfo);
+
+// Вызов функции для начального отображения диагностической информации
+updateDebugInfo();
 
 // Функция для предотвращения стандартного поведения при событии touchmove
 function preventScroll(e) {
