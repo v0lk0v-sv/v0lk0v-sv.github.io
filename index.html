@@ -126,13 +126,11 @@ function updateDebugInfo() {
   info += 'InputField Rect Bottom: ' + inputRect.bottom + 'px<br>';
   if (document.activeElement === inputField) {
     // Обновляем информацию о позиционировании
-    var inputRect = inputField.getBoundingClientRect();
     info += 'InputField Rect Top update: ' + inputRect.top + 'px<br>';
     info += 'InputField Rect Bottom update: ' + inputRect.bottom + 'px<br>';
   }
   if (document.activeElement !== inputField) {
     // Обновляем информацию о позиционировании
-    var inputRect = inputField.getBoundingClientRect();
     info += 'InputField Rect Top update: ' + inputRect.top + 'px<br>';
     info += 'InputField Rect Bottom update: ' + inputRect.bottom + 'px<br>';
   }
