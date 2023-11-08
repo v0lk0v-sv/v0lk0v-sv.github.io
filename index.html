@@ -107,27 +107,33 @@ var inputContainer = document.getElementById('inputContainer');
 
 // Функция для отображения диагностической информации
 function updateDebugInfo() {
-  var info = 'Debug Information:<br>';
-  info += 'Window inner width: ' + window.innerWidth + 'px<br>';
-  info += 'Window inner height: ' + window.innerHeight + 'px<br>';
-  info += 'Navbar offsetTop: ' + navbar.offsetTop + 'px<br>';
+  window.requestAnimationFrame(function() {
+    var info = 'Debug Information:<br>';
+    info += 'Window inner width: ' + window.innerWidth + 'px<br>';
+    info += 'Window inner height: ' + window.innerHeight + 'px<br>';
+    info += 'Navbar offsetTop: ' + navbar.offsetTop + 'px<br>';
 
-  // Получаем элемент input
-  var inputField = document.getElementById('inputField');
+    // Получаем элемент input
+    var inputField = document.getElementById('inputField');
 
-  // Получаем положение input относительно вьюпорта
-  var inputRect = inputField.getBoundingClientRect();
-  info += 'InputField Rect Top: ' + inputRect.top + 'px<br>'; // Добавляем положение от верхней границы вьюпорта
-  info += 'InputField Rect Left: ' + inputRect.left + 'px<br>'; // Добавляем положение от левой границы вьюпорта
-  info += 'InputField offsetTop: ' + inputField.offsetTop + 'px<br>';
-  info += 'Viewport height: ' + window.innerHeight + 'px<br>';
-  info += 'InputField is focused: ' + (document.activeElement === inputField) + '<br>';
-  // Добавляем положение нижней границы input относительно вьюпорта
-  info += 'InputField Rect Bottom: ' + inputRect.bottom + 'px<br>';
-  info += 'InputField Rect Top: ' + inputRect.top + 'px<br>';
-  debugInfo.innerHTML = info;
+    // Получаем положение input относительно вьюпорта
+    var inputRect = inputField.getBoundingClientRect();
+    info += 'InputField Rect Top: ' + inputRect.top + 'px<br>'; // Добавляем положение от верхней границы вьюпорта
+    info += 'InputField Rect Left: ' + inputRect.left + 'px<br>'; // Добавляем положение от левой границы вьюпорта
+    info += 'InputField offsetTop: ' + inputField.offsetTop + 'px<br>';
+    info += 'Viewport height: ' + window.innerHeight + 'px<br>';
+    info += 'InputField is focused: ' + (document.activeElement === inputField) + '<br>';
+    // Добавляем положение нижней границы input относительно вьюпорта
+    info += 'InputField Rect Bottom: ' + inputRect.bottom + 'px<br>';
+    info += 'InputField Rect Top: ' + inputRect.top + 'px<br>';
+
+    // Обновляем HTML
+    var debugInfo = document.getElementById('debugInfo');
+    if (debugInfo) {
+      debugInfo.innerHTML = info;
+    }
+  });
 }
-
 
 // Обновление диагностической информации при изменении размера окна
 window.addEventListener('resize', updateDebugInfo);
