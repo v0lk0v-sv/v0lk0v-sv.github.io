@@ -3,120 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-<title>Fixed Toolbar with Editable Content</title>
-<style>
-:root {
-  --toolbar-height: 60px;
-  --toolbar-background: #f1f5f9;
-  --toolbar-hover-background: #e2e8f0;
-  --transition-duration: 500ms;
-  --transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
+<title>Bootstrap Site with Fixed Navbar</title>
+<!-- Link to Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
 
-body {
-  margin: 0px;
-}
+<!-- Fixed Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-#editor {
-  padding: 5px 20px;
-}
-
-#editor:focus {
-  outline: 2px solid transparent;
-}
-
-#toolbar-wrap {
-  position: sticky;
-  top: 0px;
-  height: var(--toolbar-height);
-  width: 100%;
-}
-
-#toolbar {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  padding: 15px;
-  background-color: var(--toolbar-background);
-  transition-property: margin-top;
-  transition-duration: var(--transition-duration);
-  transition-timing-function: var(--transition-timing-function);
-}
-
-.button {
-  border-radius: 5px;
-  background-color: transparent;
-  border: 0px;
-  padding: 3px 5px;
-  line-height: 0px;
-  display: inline-block;
-  margin: 1px;
-  cursor: pointer;
-}
-
-.button:hover {
-  background-color: var(--toolbar-hover-background);
-}
-</style>
-<div id="toolbar-wrap">
-  <div id="toolbar">
-    <button class="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M8 11h4.5a2.5 2.5 0 1 0 0-5H8v5zm10 4.5a4.5 4.5 0 0 1-4.5 4.5H6V4h6.5a4.5 4.5 0 0 1 3.256 7.606A4.498 4.498 0 0 1 18 15.5zM8 13v5h5.5a2.5 2.5 0 1 0 0-5H8z"/></svg></button>
-    <div class="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 20H7v-2h2.927l2.116-12H9V4h8v2h-2.927l-2.116 12H15z"/></svg></div>
-    <div class="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M8 3v9a4 4 0 1 0 8 0V3h2v9a6 6 0 1 1-12 0V3h2zM4 20h16v2H4v-2z"/></svg></div>
+<!-- Body Content -->
+<div class="container mt-5 pt-5">
+  <div class="row">
+    <div class="col-12">
+      <!-- Placeholder text -->
+      <div style="height: 130vh;"> <!-- 1.3 times the viewport height -->
+        <p class="lead">This is a placeholder text. Replace it with your own content.</p>
+      </div>
+      <!-- Input Form -->
+      <form>
+        <div class="form-group">
+          <label for="inputField">Input Label</label>
+          <input type="text" class="form-control" id="inputField" placeholder="Enter text">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
   </div>
 </div>
 
-<div id="editor" contentEditable="true">
-  <p>This is a very long editable area.</p>
-  <p>The problem is, when you focus in this area on an iOS device, a keyboard pops up and that beautiful fixed toolbar at the top gets hidden.</p>
-  <p>You will need to fork this pen and view in debug mode on an iOS device to see the fix in action (so that you are not viewing it inside an iframe).</p>
-  <p>You might need to scroll down a bit to see the header disappear.</p>
-  <p>Let's fix this problem, using JavaScript!</p>
-  <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p> <p>...</p><p>...</p>
-    <p>This is a very long editable area.</p>
-  <p>The problem is, when you focus in this area on an iOS device, a keyboard pops up and that beautiful fixed toolbar at the top gets hidden.</p>
-  <p>Let's fix this problem, using JavaScript!</p>
-  
-</div>
-<script>
-// Переменные для отслеживания состояния тулбара
-let toolbarVisible = true;
-const toolbarWrap = document.getElementById('toolbar-wrap');
-const toolbar = document.getElementById('toolbar');
-const editor = document.getElementById('editor');
-
-// Функция для установки отступа тулбара
-const setToolbarMargin = () => {
-  requestAnimationFrame(() => {
-    const toolbarPosition = toolbarWrap.getBoundingClientRect().top;
-    if (toolbarPosition < 0 && toolbarVisible) {
-      // Показываем тулбар
-      toolbar.classList.add('down');
-      toolbar.style.marginTop = `${-toolbarPosition}px`;
-      toolbarVisible = false;
-    } else if (toolbarPosition >= 0 && !toolbarVisible) {
-      // Скрываем тулбар
-      toolbar.classList.remove('down');
-      toolbar.style.marginTop = '0px';
-      toolbarVisible = true;
-    }
-  });
-}
-
-// Обработчик прокрутки страницы
-const handleScroll = () => {
-  setToolbarMargin();
-}
-
-// Обработчик события потери фокуса редактором
-const handleBlur = () => {
-  setToolbarMargin();
-}
-
-// Подписываемся на события прокрутки и потери фокуса
-window.addEventListener('scroll', handleScroll);
-editor.addEventListener('blur', handleBlur);
-</script>  
+<!-- Link to Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
