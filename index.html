@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Site with Fixed Navbar</title>
 <style>
   body {
@@ -111,11 +111,22 @@ function updateDebugInfo() {
   info += 'Window inner width: ' + window.innerWidth + 'px<br>';
   info += 'Window inner height: ' + window.innerHeight + 'px<br>';
   info += 'Navbar offsetTop: ' + navbar.offsetTop + 'px<br>';
+
+  // Получаем элемент input
+  var inputField = document.getElementById('inputField');
+
+  // Получаем положение input относительно вьюпорта
+  var inputRect = inputField.getBoundingClientRect();
+  info += 'InputField Rect Top: ' + inputRect.top + 'px<br>'; // Добавляем положение от верхней границы вьюпорта
+  info += 'InputField Rect Left: ' + inputRect.left + 'px<br>'; // Добавляем положение от левой границы вьюпорта
   info += 'InputField offsetTop: ' + inputField.offsetTop + 'px<br>';
   info += 'Viewport height: ' + window.innerHeight + 'px<br>';
-  info += 'InputField is focused: ' + (document.activeElement === inputField);
+  info += 'InputField is focused: ' + (document.activeElement === inputField) + '<br>';
+  // Добавляем положение нижней границы input относительно вьюпорта
+  info += 'InputField Rect Bottom: ' + inputRect.bottom + 'px<br>';
   debugInfo.innerHTML = info;
 }
+
 
 // Обновление диагностической информации при изменении размера окна
 window.addEventListener('resize', updateDebugInfo);
