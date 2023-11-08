@@ -6,7 +6,15 @@
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 <title>Fixed Toolbar with Editable Content</title>
 <style>
-  body {
+:root {
+  --toolbar-height: 60px;
+  --toolbar-background: #f1f5f9;
+  --toolbar-hover-background: #e2e8f0;
+  --transition-duration: 500ms;
+  --transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
   margin: 0px;
 }
 
@@ -21,7 +29,7 @@
 #toolbar-wrap {
   position: sticky;
   top: 0px;
-  height: 60px;
+  height: var(--toolbar-height);
   width: 100%;
 }
 
@@ -30,11 +38,10 @@
   left: 0px;
   right: 0px;
   padding: 15px;
-  background-color: #f1f5f9;
-}
-
-#toolbar.down {
-  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--toolbar-background);
+  transition-property: margin-top;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: var(--transition-timing-function);
 }
 
 .button {
@@ -49,7 +56,7 @@
 }
 
 .button:hover {
-  background-color: #e2e8f0;
+  background-color: var(--toolbar-hover-background);
 }
 </style>
 <div id="toolbar-wrap">
@@ -73,58 +80,43 @@
   
 </div>
 <script>
+// Переменные для отслеживания состояния тулбара
+let toolbarVisible = true;
 const toolbarWrap = document.getElementById('toolbar-wrap');
 const toolbar = document.getElementById('toolbar');
 const editor = document.getElementById('editor');
-let animationFrameId = null;
 
-// Функция debounce
-function debounce(func, wait, immediate) {
-  let timeout;
-  return function executedFunction() {
-    let context = this, args = arguments;
-    let later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    let callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
+// Функция для установки отступа тулбара
+const setToolbarMargin = () => {
+  requestAnimationFrame(() => {
+    const toolbarPosition = toolbarWrap.getBoundingClientRect().top;
+    if (toolbarPosition < 0 && toolbarVisible) {
+      // Показываем тулбар
+      toolbar.classList.add('down');
+      toolbar.style.marginTop = `${-toolbarPosition}px`;
+      toolbarVisible = false;
+    } else if (toolbarPosition >= 0 && !toolbarVisible) {
+      // Скрываем тулбар
+      toolbar.classList.remove('down');
+      toolbar.style.marginTop = '0px';
+      toolbarVisible = true;
+    }
+  });
 }
 
-// Определение функции для использования с requestAnimationFrame
-function animateToolbar() {
-  const newPosition = toolbarWrap.getBoundingClientRect().top;
-  if (newPosition < -1 && !toolbar.classList.contains("down")) {
-    toolbar.classList.add("down");
-    fixPosition = Math.abs(newPosition);
-    toolbar.style.transform = `translateY(${fixPosition}px)`;
-  } else if (newPosition >= -1 && toolbar.classList.contains("down")) {
-    toolbar.classList.remove("down");
-    toolbar.style.transform = 'translateY(0px)';
-  }
-  animationFrameId = null;
+// Обработчик прокрутки страницы
+const handleScroll = () => {
+  setToolbarMargin();
 }
 
-// Функция, вызывающая animateToolbar с использованием requestAnimationFrame
-function requestToolbarAnimation() {
-  if (animationFrameId === null) {
-    animationFrameId = requestAnimationFrame(animateToolbar);
-  }
+// Обработчик события потери фокуса редактором
+const handleBlur = () => {
+  setToolbarMargin();
 }
 
-// Создаем debounced версию requestToolbarAnimation
-const requestToolbarAnimationDebounced = debounce(requestToolbarAnimation, 150);
-
-// Добавляем обработчики событий
-window.addEventListener("scroll", requestToolbarAnimationDebounced);
-window.addEventListener("resize", requestToolbarAnimationDebounced);
-editor.addEventListener("blur", function() {
-  requestAnimationFrame(animateToolbar); // Можно вызвать напрямую, так как blur срабатывает редко
-});
-
+// Подписываемся на события прокрутки и потери фокуса
+window.addEventListener('scroll', handleScroll);
+editor.addEventListener('blur', handleBlur);
 </script>  
 </body>
 </html>
