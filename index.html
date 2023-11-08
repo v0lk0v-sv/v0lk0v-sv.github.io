@@ -112,16 +112,20 @@ function updateDebugInfo() {
   info += 'Window inner height: ' + window.innerHeight + 'px<br>';
   info += 'Navbar offsetTop: ' + navbar.offsetTop + 'px<br>';
   info += 'InputField offsetTop: ' + inputField.offsetTop + 'px<br>';
-  info += 'InputField is focused: ' + (document.activeElement === inputField);
   info += 'Viewport height: ' + window.innerHeight + 'px<br>';
+  info += 'InputField is focused: ' + (document.activeElement === inputField);
   debugInfo.innerHTML = info;
 }
 
 // Обновление диагностической информации при изменении размера окна
 window.addEventListener('resize', updateDebugInfo);
 
-// Обновление диагностической информации при фокусировке и потере фокуса
-inputField.addEventListener('focus', updateDebugInfo);
+// Обновление информации при фокусировке на элемент ввода
+inputField.addEventListener('focus', function() {
+  setTimeout(updateDebugInfo, 500); // задержка, чтобы учесть анимацию клавиатуры
+});
+
+// Обновление информации при потере фокуса элементом ввода
 inputField.addEventListener('blur', updateDebugInfo);
 
 // Вызов функции для начального отображения диагностической информации
