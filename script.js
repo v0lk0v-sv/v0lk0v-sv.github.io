@@ -1,7 +1,5 @@
 <script>
-// Объявляем функцию на уровне скрипта для глобального доступа
 function updateVisibilityOfDiv(form) {
-  // Передаем форму в функцию и ищем div в контексте этой формы
   const div = form.querySelector('[ms-code-file-upload-input="fileToUpload"]');
   if (div) {
     div.style.display = form.selectedFiles.length > 0 ? 'block' : 'none';
@@ -13,7 +11,7 @@ let currentDeleteIndex = -1;
 
 forms.forEach((form) => {
   form.setAttribute('enctype', 'multipart/form-data');
-  form.selectedFiles = []; // Используем selectedFiles как свойство формы
+  form.selectedFiles = []; 
   const uploadInputs = form.querySelectorAll('[ms-code-file-upload-input]');
 
   uploadInputs.forEach((uploadInput) => {
@@ -63,7 +61,7 @@ forms.forEach((form) => {
         previewsContainer.appendChild(previewWrapper);
       });
       updateButtonStatus();
-      updateVisibilityOfDiv(form); // Обновляем видимость div
+      updateVisibilityOfDiv(form); 
     };
 
     if (button) {
@@ -89,7 +87,7 @@ forms.forEach((form) => {
           alert('Maximum of 4 photos.');
         } else {
           Array.from(fileInput.files).forEach((file) => {
-            form.selectedFiles.push(file); // Добавляем файлы в массив
+            form.selectedFiles.push(file); 
           });
           updatePreviews();
         }
@@ -106,86 +104,57 @@ function openSheet(deleteCallback, index) {
     deleteCallback();
     closeSheet();
   };
-  $('.gfg-action ').show();
+  //$('.gfg-action ').show();
+	document.getElementById('action-sheet').classList.add('action-sheet-visible');
+	document.getElementById('mask').classList.add('mask-visible');
   document.body.classList.add('body-no-scroll');
-  const form = forms[currentDeleteIndex]; // Получаем текущую форму по индексу
+  const form = forms[currentDeleteIndex]; 
   if (form) {
-    updateVisibilityOfDiv(form); // Обновляем видимость div для текущей формы
+    updateVisibilityOfDiv(form); 
   }
 }
 
 function closeSheet() {
-  $('.gfg-action ').hide();
+  //$('.gfg-action ').hide();
+	document.getElementById('action-sheet').classList.remove('action-sheet-visible');
+	document.getElementById('mask').classList.remove('mask-visible');
   document.body.classList.remove('body-no-scroll');
   if (currentDeleteIndex !== -1) {
     const form = forms[currentDeleteIndex];
-    updateVisibilityOfDiv(form); // Также обновляем видимость div при закрытии
+    updateVisibilityOfDiv(form);
   }
 }
 
 document.querySelector('.gfg-action.action-sheet-mask.extraMask').addEventListener('click', closeSheet);
 
-var header = document.getElementById('toolbar');
-window.onscroll = function() {
-  if (window.pageYOffset > 0) {
-    if (!header.classList.contains('scrolled')) {
-      header.classList.add('scrolled');
-      // Задержка для начала анимации
-      setTimeout(function() {
-        header.classList.add('visible');
-      }, 10); // Небольшая задержка перед началом анимации
-    }
+window.addEventListener('scroll', function() {
+  var header = document.querySelector('.h-main-nav-wrap');
+  if (window.pageYOffset > 1) {
+    header.classList.add('scrolled');
   } else {
-    header.classList.remove('visible');
-    // Удалить класс 'scrolled' после исчезновения границы
-    setTimeout(function() {
-      header.classList.remove('scrolled');
-    }, 100); // Задержка должна соответствовать длительности анимации
+    header.classList.remove('scrolled');
   }
-};
+});
+</script>
+<script>
+  const form = document.getElementById('email-form');
+  const emailInput = document.getElementById('email');
+  const messageInput = document.getElementById('message');
+  const submitButton = document.getElementById('form-button');
 
-let fixPosition = 0; // the fix
-let lastScrollY = window.pageYOffset; // the last scroll position
-let toolbarWrap = document.getElementById('toolbar-wrap'); // the toolbar wrap
-let toolbar = document.getElementById('toolbar'); // the toolbar
-let editor = document.getElementById('message'); // the editor
+  function checkInputs() {
+    const messageValue = messageInput.value.trim();
+    const emailValue = emailInput.value.trim();
 
-// function to set the margin to show the toolbar if hidden
-const setMargin = function() {
-  // if toolbar wrap is hidden
-  const newPosition = toolbarWrap.getBoundingClientRect().top;
-  if (newPosition < -1) {
-    // add a margin to show the toolbar
-    toolbar.classList.add("down"); // add class so toolbar can be animated
-    fixPosition = Math.abs(newPosition); // this is new position we need to fix the toolbar in the display
-    // if at the bottom of the page take a couple of pixels off due to gap
-    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-      fixPosition -= 2;
+    //if (messageValue.length > 0 && emailValue.length > 0
+       //) {
+    if (form.checkValidity()) {
+      submitButton.classList.add('btn-gh-active');
+    } else {
+      submitButton.classList.remove('btn-gh-active');
     }
-    // set the margin to the new fixed position
-    toolbar.style["margin-top"] = fixPosition + "px";
   }
-}
 
-// use lodash debounce to stop flicker
-const debounceMargin = _.debounce(setMargin, 150);
-
-// function to run on scroll and blur
-const showToolbar = function() {
-  // remove animation and put toolbar back in default position
-  if (fixPosition > 0) {
-    toolbar.classList.remove("down");
-    fixPosition = 0;
-    toolbar.style["margin-top"] = 0 + "px";
-  }
-  // will check if toolbar needs to be fixed
-  debounceMargin();
-}
-
-// add an event listener to scroll to check if
-// toolbar position has moved off the page
-window.addEventListener("scroll", showToolbar);
-// add an event listener to blur as iOS keyboard may have closed
-// and toolbar postition needs to be checked again
-editor.addEventListener("blur", showToolbar);
+  messageInput.addEventListener('input', checkInputs);
+  emailInput.addEventListener('input', checkInputs);
 </script>
