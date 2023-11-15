@@ -141,13 +141,12 @@ window.addEventListener('scroll', function() {
   const emailInput = document.getElementById('email');
   const messageInput = document.getElementById('message');
   const submitButton = document.getElementById('form-button');
+  const emailErrorElement = document.getElementById('emailError'); //new
 
   function checkInputs() {
     const messageValue = messageInput.value.trim();
     const emailValue = emailInput.value.trim();
 
-    //if (messageValue.length > 0 && emailValue.length > 0
-       //) {
     if (form.checkValidity()) {
       submitButton.classList.add('btn-gh-active');
     } else {
@@ -155,6 +154,20 @@ window.addEventListener('scroll', function() {
     }
   }
 
+	//new
+  function validateEmail() {
+    if (!emailInput.checkValidity()) {
+      emailErrorElement.textContent = emailInput.validationMessage;
+      emailErrorElement.style.display = 'block';
+			emailInput.classList.add('email-not-valid');
+    } else {
+      emailErrorElement.style.display = 'none';
+			emailInput.classList.remove('email-not-valid');
+    }
+  }
+	//end of new
+
   messageInput.addEventListener('input', checkInputs);
   emailInput.addEventListener('input', checkInputs);
+	emailInput.addEventListener('blur', validateEmail); //new
 </script>
