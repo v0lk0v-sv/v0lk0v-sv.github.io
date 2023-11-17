@@ -137,37 +137,78 @@ window.addEventListener('scroll', function() {
 });
 </script>
 <script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  const form = document.getElementById('email-form');
+  if (form) {
+    form.setAttribute('novalidate', '');
+  }
+});
+
   const form = document.getElementById('email-form');
   const emailInput = document.getElementById('email');
   const messageInput = document.getElementById('message');
   const submitButton = document.getElementById('form-button');
-  const emailErrorElement = document.getElementById('emailError'); //new
+  const emailErrorElement = document.getElementById('emailError'); 
+  const messageErrorElement = document.getElementById('messageError');
 
   function checkInputs() {
-    const messageValue = messageInput.value.trim();
-    const emailValue = emailInput.value.trim();
+    let isValid = form.checkValidity();
+    submitButton.disabled = !isValid;
+    submitButton.classList.toggle('btn-gh-active', isValid);
+	}
 
-    if (form.checkValidity()) {
-      submitButton.classList.add('btn-gh-active');
-    } else {
-      submitButton.classList.remove('btn-gh-active');
-    }
-  }
-
-	//new
-  function validateEmail() {
-    if (!emailInput.checkValidity()) {
-      emailErrorElement.textContent = emailInput.validationMessage;
-      emailErrorElement.style.display = 'block';
-			emailInput.classList.add('email-not-valid');
-    } else {
-      emailErrorElement.style.display = 'none';
-			emailInput.classList.remove('email-not-valid');
-    }
-  }
-	//end of new
+	function validateEmail() {
+    if (emailInput.value.trim() === '') {
+    	emailErrorElement.textContent = 'This field is required';
+    	//emailErrorElement.style.display = 'block';
+			emailErrorElement.classList.add('visible');
+    	emailInput.classList.add('input-not-valid');
+  	}
+    else if (!emailInput.validity.valid) { 
+    	emailErrorElement.textContent = 'Enter a valid email address';
+    	//emailErrorElement.style.display = 'block';
+			emailErrorElement.classList.add('visible');
+    	emailInput.classList.add('input-not-valid');
+  	} else {
+    	//emailErrorElement.style.display = 'none';
+			emailErrorElement.classList.remove('visible');
+    	emailInput.classList.remove('input-not-valid');
+  	}
+    checkInputs();
+	}
 
   messageInput.addEventListener('input', checkInputs);
-  emailInput.addEventListener('input', checkInputs);
-	emailInput.addEventListener('blur', validateEmail); //new
+  //emailInput.addEventListener('input', checkInputs);
+	emailInput.addEventListener('blur', validateEmail);
+	emailInput.addEventListener('input', function() {
+  	if (emailInput.validity.valid) {
+    	emailErrorElement.classList.remove('visible');
+    	emailInput.classList.remove('input-not-valid');
+  	} else {
+    	if (emailInput.value.trim() === '') {
+      	emailErrorElement.textContent = 'This field is required';
+      } else {
+      	emailErrorElement.textContent = 'Enter a valid email address';
+      }
+      emailErrorElement.classList.add('visible');
+			emailInput.classList.add('input-not-valid');
+		}
+    checkInputs();
+	});
+  messageInput.addEventListener('blur', function() {
+  	if (messageInput.value.trim() === '') {
+    	messageErrorElement.classList.add('visible');
+      messageInput.classList.add('input-not-valid');
+  	} else {
+    	messageErrorElement.classList.remove('visible');
+      messageInput.classList.remove('input-not-valid');
+  	}
+	});
+
+form.addEventListener('submit', (e) => {
+  if (!form.checkValidity()) {
+    e.preventDefault();
+    checkInputs(); 
+  }
+});
 </script>
