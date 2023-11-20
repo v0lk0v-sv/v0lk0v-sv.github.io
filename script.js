@@ -180,21 +180,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
   messageInput.addEventListener('input', checkInputs);
   //emailInput.addEventListener('input', checkInputs);
 	emailInput.addEventListener('blur', validateEmail);
-	emailInput.addEventListener('input', function() {
-  	if (emailInput.validity.valid) {
-    	emailErrorElement.classList.remove('visible');
-    	emailInput.classList.remove('input-not-valid');
-  	} else {
-    	if (emailInput.value.trim() === '') {
-      	emailErrorElement.textContent = 'This field is required';
-      } else {
-      	emailErrorElement.textContent = 'Enter a valid email address';
-      }
-      emailErrorElement.classList.add('visible');
-			emailInput.classList.add('input-not-valid');
-		}
-    checkInputs();
-	});
+	//emailInput.addEventListener('input', function() {
+  	//if (emailInput.validity.valid) {
+    	//emailErrorElement.classList.remove('visible');
+    	//emailInput.classList.remove('input-not-valid');
+  	//} else {
+    	//if (emailInput.value.trim() === '') {
+      	//emailErrorElement.textContent = 'This field is required';
+      //} else {
+      	//emailErrorElement.textContent = 'Enter a valid email address';
+      //}
+      //emailErrorElement.classList.add('visible');
+			//emailInput.classList.add('input-not-valid');
+		//}
+    //checkInputs();
+	//});
+ emailInput.addEventListener('input', function() {
+  if (emailInput.validity.valid && emailErrorElement.classList.contains('visible')) {
+    emailErrorElement.classList.remove('visible');
+    emailInput.classList.remove('input-not-valid');
+    emailErrorElement.textContent = '';
+  }
+  checkInputs();
+});
   messageInput.addEventListener('blur', function() {
   	if (messageInput.value.trim() === '') {
     	messageErrorElement.classList.add('visible');
@@ -204,6 +212,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
       messageInput.classList.remove('input-not-valid');
   	}
 	});
+
+messageInput.addEventListener('input', function() {
+  if (messageInput.value.trim() !== '' && messageErrorElement.classList.contains('visible')) {
+    messageErrorElement.classList.remove('visible');
+    messageInput.classList.remove('input-not-valid');
+    messageErrorElement.textContent = ''; 
+  }
+  checkInputs();
+});
 
 form.addEventListener('submit', (e) => {
   if (!form.checkValidity()) {
