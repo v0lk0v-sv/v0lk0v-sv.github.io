@@ -157,7 +157,7 @@ function checkInputs() {
   let isValid = isEmailValid && isMessageValid;
   submitButton.disabled = !isValid;
   submitButton.classList.toggle('btn-gh-active', isValid);
-
+  return isValid;
 }
 
 function validateEmail() {
@@ -220,6 +220,8 @@ messageInput.addEventListener('input', function () {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  checkInputs();
+  if (checkInputs()) {
+    form.submit();
+  }
 });
 </script>
