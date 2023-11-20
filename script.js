@@ -9,6 +9,8 @@ function updateVisibilityOfDiv(form) {
 const forms = document.querySelectorAll('form[ms-code-file-upload="form"]');
 let currentDeleteIndex = -1;
 
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
 forms.forEach((form) => {
   form.setAttribute('enctype', 'multipart/form-data');
   form.selectedFiles = []; 
@@ -164,7 +166,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			emailErrorElement.classList.add('visible');
     	emailInput.classList.add('input-not-valid');
   	}
-    else if (!emailInput.validity.valid) { 
+    else if (!emailRegex.test(emailInput.value)) { 
     	emailErrorElement.textContent = 'Enter a valid email address';
     	//emailErrorElement.style.display = 'block';
 			emailErrorElement.classList.add('visible');
@@ -196,7 +198,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     //checkInputs();
 	//});
  emailInput.addEventListener('input', function() {
-  if (emailInput.validity.valid && emailErrorElement.classList.contains('visible')) {
+  if (emailRegex.test(emailInput.value) && emailErrorElement.classList.contains('visible')) {
     emailErrorElement.classList.remove('visible');
     emailInput.classList.remove('input-not-valid');
     emailErrorElement.textContent = '';
@@ -217,7 +219,7 @@ messageInput.addEventListener('input', function() {
   if (messageInput.value.trim() !== '' && messageErrorElement.classList.contains('visible')) {
     messageErrorElement.classList.remove('visible');
     messageInput.classList.remove('input-not-valid');
-    messageErrorElement.textContent = ''; 
+    //messageErrorElement.textContent = ''; 
   }
   checkInputs();
 });
