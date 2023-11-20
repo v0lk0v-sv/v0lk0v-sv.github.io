@@ -129,7 +129,7 @@ function closeSheet() {
 document.querySelector('.gfg-action.action-sheet-mask.extraMask').addEventListener('click', closeSheet);
 
 window.addEventListener('scroll', function () {
-  var header = document.querySelector('.h-main-nav-wrap');
+  var header = document.getElementById('toolbar-wrap');
   if (window.pageYOffset > 1) {
     header.classList.add('scrolled');
   } else {
