@@ -10,10 +10,11 @@ const forms = document.querySelectorAll('form[ms-code-file-upload="form"]');
 let currentDeleteIndex = -1;
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+let isCheckingInputs = false;
 
 forms.forEach((form) => {
   form.setAttribute('enctype', 'multipart/form-data');
-  form.selectedFiles = []; 
+  form.selectedFiles = [];
   const uploadInputs = form.querySelectorAll('[ms-code-file-upload-input]');
 
   uploadInputs.forEach((uploadInput) => {
@@ -63,7 +64,7 @@ forms.forEach((form) => {
         previewsContainer.appendChild(previewWrapper);
       });
       updateButtonStatus();
-      updateVisibilityOfDiv(form); 
+      updateVisibilityOfDiv(form);
     };
 
     if (button) {
@@ -89,7 +90,7 @@ forms.forEach((form) => {
           alert('Maximum of 4 photos.');
         } else {
           Array.from(fileInput.files).forEach((file) => {
-            form.selectedFiles.push(file); 
+            form.selectedFiles.push(file);
           });
           updatePreviews();
         }
@@ -102,24 +103,24 @@ forms.forEach((form) => {
 
 function openSheet(deleteCallback, index) {
   currentDeleteIndex = index;
-  document.querySelector('.btnDelete').onclick = function() {
+  document.querySelector('.btnDelete').onclick = function () {
     deleteCallback();
     closeSheet();
   };
   //$('.gfg-action ').show();
-	document.getElementById('action-sheet').classList.add('action-sheet-visible');
-	document.getElementById('mask').classList.add('mask-visible');
+  document.getElementById('action-sheet').classList.add('action-sheet-visible');
+  document.getElementById('mask').classList.add('mask-visible');
   document.body.classList.add('body-no-scroll');
-  const form = forms[currentDeleteIndex]; 
+  const form = forms[currentDeleteIndex];
   if (form) {
-    updateVisibilityOfDiv(form); 
+    updateVisibilityOfDiv(form);
   }
 }
 
 function closeSheet() {
   //$('.gfg-action ').hide();
-	document.getElementById('action-sheet').classList.remove('action-sheet-visible');
-	document.getElementById('mask').classList.remove('mask-visible');
+  document.getElementById('action-sheet').classList.remove('action-sheet-visible');
+  document.getElementById('mask').classList.remove('mask-visible');
   document.body.classList.remove('body-no-scroll');
   if (currentDeleteIndex !== -1) {
     const form = forms[currentDeleteIndex];
@@ -129,7 +130,7 @@ function closeSheet() {
 
 document.querySelector('.gfg-action.action-sheet-mask.extraMask').addEventListener('click', closeSheet);
 
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
   var header = document.querySelector('.h-main-nav-wrap');
   if (window.pageYOffset > 1) {
     header.classList.add('scrolled');
@@ -137,8 +138,7 @@ window.addEventListener('scroll', function() {
     header.classList.remove('scrolled');
   }
 });
-</script>
-<script>
+
 document.addEventListener('DOMContentLoaded', (event) => {
   const form = document.getElementById('email-form');
   if (form) {
@@ -146,88 +146,131 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 });
 
-  const form = document.getElementById('email-form');
-  const emailInput = document.getElementById('email');
-  const messageInput = document.getElementById('message');
-  const submitButton = document.getElementById('form-button');
-  const emailErrorElement = document.getElementById('emailError'); 
-  const messageErrorElement = document.getElementById('messageError');
+const form = document.getElementById('email-form');
+const emailInput = document.getElementById('email');
+const messageInput = document.getElementById('message');
+const submitButton = document.getElementById('form-button');
+const emailErrorElement = document.getElementById('emailError');
+const messageErrorElement = document.getElementById('messageError');
 
-  function checkInputs() {
-    let isValid = form.checkValidity();
-    submitButton.disabled = !isValid;
-    submitButton.classList.toggle('btn-gh-active', isValid);
-	}
+function checkInputs() {
+  let isEmailValid = validateEmail();
+  let isMessageValid = validateMessage();
+  let isValid = isEmailValid && isMessageValid;
+  submitButton.disabled = !isValid;
+  console.log('isValid= ' + isValid);
+  submitButton.classList.toggle('btn-gh-active', isValid);
 
-	function validateEmail() {
-    if (emailInput.value.trim() === '') {
-    	emailErrorElement.textContent = 'This field is required';
-    	//emailErrorElement.style.display = 'block';
-			emailErrorElement.classList.add('visible');
-    	emailInput.classList.add('input-not-valid');
-  	}
-    else if (!emailRegex.test(emailInput.value)) { 
-    	emailErrorElement.textContent = 'Enter a valid email address';
-    	//emailErrorElement.style.display = 'block';
-			emailErrorElement.classList.add('visible');
-    	emailInput.classList.add('input-not-valid');
-  	} else {
-    	//emailErrorElement.style.display = 'none';
-			emailErrorElement.classList.remove('visible');
-    	emailInput.classList.remove('input-not-valid');
-  	}
-    checkInputs();
-	}
+}
 
-  messageInput.addEventListener('input', checkInputs);
-  //emailInput.addEventListener('input', checkInputs);
-	emailInput.addEventListener('blur', validateEmail);
-	//emailInput.addEventListener('input', function() {
-  	//if (emailInput.validity.valid) {
-    	//emailErrorElement.classList.remove('visible');
-    	//emailInput.classList.remove('input-not-valid');
-  	//} else {
-    	//if (emailInput.value.trim() === '') {
-      	//emailErrorElement.textContent = 'This field is required';
-      //} else {
-      	//emailErrorElement.textContent = 'Enter a valid email address';
-      //}
-      //emailErrorElement.classList.add('visible');
-			//emailInput.classList.add('input-not-valid');
-		//}
-    //checkInputs();
-	//});
- emailInput.addEventListener('input', function() {
-  if (emailRegex.test(emailInput.value) && emailErrorElement.classList.contains('visible')) {
+function validateEmail() {
+
+  if (emailInput.value.trim() === '') {
+  	let isValid = false;
+    emailErrorElement.textContent = 'This field is required';
+    emailErrorElement.classList.add('visible');
+    emailInput.classList.add('input-not-valid');
+    isValid = false;
+  }
+  else if (!emailRegex.test(emailInput.value)) {
+    emailErrorElement.textContent = 'Enter a valid email address';
+    emailErrorElement.classList.add('visible');
+    emailInput.classList.add('input-not-valid');
+    isValid = false;
+  } else {
+    //emailErrorElement.style.display = 'none';
     emailErrorElement.classList.remove('visible');
     emailInput.classList.remove('input-not-valid');
-    emailErrorElement.textContent = '';
+    isValid = true;
+  }
+  console.log('validateEmail: ' + isValid); 
+  return isValid;
+  // if (!isCheckingInputs) {
+  //   checkInputs();
+  // }
+  //checkInputs();
+}
+
+function validateMessage() {
+  // var isValid;
+  // if (isCheckingInputs) return;
+  let isValid = false;
+  
+  if (messageInput.value.trim() !== '') {
+    //isValid=true;
+    isValid = true;
+  } else {
+    //isValid=false;
+   isValid = false;
+  }
+  console.log('validateMessage: ' + isValid);
+  return isValid;
+  // if (!isCheckingInputs) {
+  //   checkInputs();
+  // }
+}
+
+//messageInput.addEventListener('input', checkInputs);
+emailInput.addEventListener('blur', validateEmail);
+// emailInput.addEventListener('input', function () {
+//   if (emailRegex.test(emailInput.value) && emailErrorElement.classList.contains('visible')) {
+//     emailErrorElement.classList.remove('visible');
+//     emailInput.classList.remove('input-not-valid');
+//     emailErrorElement.textContent = '';
+//   }
+//   checkInputs();
+// });
+// emailInput.addEventListener('input', function () {
+//   validateEmail();
+// });
+//emailInput.addEventListener('input', validateEmail);
+emailInput.addEventListener('input', function () {
+  if (emailRegex.test(emailInput.value)) {
+    emailErrorElement.classList.remove('visible');
+    emailInput.classList.remove('input-not-valid');
+    emailErrorElement.textContent = ''; 
   }
   checkInputs();
 });
-  messageInput.addEventListener('blur', function() {
-  	if (messageInput.value.trim() === '') {
-    	messageErrorElement.classList.add('visible');
-      messageInput.classList.add('input-not-valid');
-  	} else {
-    	messageErrorElement.classList.remove('visible');
-      messageInput.classList.remove('input-not-valid');
-  	}
-	});
 
-messageInput.addEventListener('input', function() {
-  if (messageInput.value.trim() !== '' && messageErrorElement.classList.contains('visible')) {
+messageInput.addEventListener('blur', function () {
+  if (messageInput.value.trim() === '') {
+    messageErrorElement.classList.add('visible');
+    messageInput.classList.add('input-not-valid');
+  } else {
     messageErrorElement.classList.remove('visible');
     messageInput.classList.remove('input-not-valid');
-    //messageErrorElement.textContent = ''; 
+  }
+});
+// messageInput.addEventListener('input', function () {
+//   validateMessage();
+// });
+//messageInput.addEventListener('input', validateMessage);
+messageInput.addEventListener('input', function () {
+  if (messageInput.value.trim() !== '') {
+    messageErrorElement.classList.remove('visible');
+    messageInput.classList.remove('input-not-valid');
   }
   checkInputs();
 });
 
+// messageInput.addEventListener('input', function () {
+//   if (messageInput.value.trim() !== '' && messageErrorElement.classList.contains('visible')) {
+//     messageErrorElement.classList.remove('visible');
+//     messageInput.classList.remove('input-not-valid');
+
+//   }
+//   checkInputs();
+// });
+
+// form.addEventListener('submit', (e) => {
+//   if (!form.checkValidity()) {
+//     e.preventDefault();
+//     checkInputs();
+//   }
+// });
 form.addEventListener('submit', (e) => {
-  if (!form.checkValidity()) {
-    e.preventDefault();
-    checkInputs(); 
-  }
+  e.preventDefault(); // Всегда предотвращаем отправку формы по умолчанию
+  checkInputs();
 });
 </script>
