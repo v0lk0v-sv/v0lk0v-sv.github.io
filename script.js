@@ -107,7 +107,6 @@ function openSheet(deleteCallback, index) {
     deleteCallback();
     closeSheet();
   };
-  //$('.gfg-action ').show();
   document.getElementById('action-sheet').classList.add('action-sheet-visible');
   document.getElementById('mask').classList.add('mask-visible');
   document.body.classList.add('body-no-scroll');
@@ -118,7 +117,6 @@ function openSheet(deleteCallback, index) {
 }
 
 function closeSheet() {
-  //$('.gfg-action ').hide();
   document.getElementById('action-sheet').classList.remove('action-sheet-visible');
   document.getElementById('mask').classList.remove('mask-visible');
   document.body.classList.remove('body-no-scroll');
@@ -158,13 +156,11 @@ function checkInputs() {
   let isMessageValid = validateMessage();
   let isValid = isEmailValid && isMessageValid;
   submitButton.disabled = !isValid;
-  console.log('isValid= ' + isValid);
   submitButton.classList.toggle('btn-gh-active', isValid);
 
 }
 
 function validateEmail() {
-
   if (emailInput.value.trim() === '') {
   	let isValid = false;
     emailErrorElement.textContent = 'This field is required';
@@ -178,52 +174,19 @@ function validateEmail() {
     emailInput.classList.add('input-not-valid');
     isValid = false;
   } else {
-    //emailErrorElement.style.display = 'none';
     emailErrorElement.classList.remove('visible');
     emailInput.classList.remove('input-not-valid');
     isValid = true;
   }
-  console.log('validateEmail: ' + isValid); 
   return isValid;
-  // if (!isCheckingInputs) {
-  //   checkInputs();
-  // }
-  //checkInputs();
 }
 
 function validateMessage() {
-  // var isValid;
-  // if (isCheckingInputs) return;
-  let isValid = false;
-  
-  if (messageInput.value.trim() !== '') {
-    //isValid=true;
-    isValid = true;
-  } else {
-    //isValid=false;
-   isValid = false;
-  }
-  console.log('validateMessage: ' + isValid);
+  let isValid = messageInput.value.trim() !== '';
   return isValid;
-  // if (!isCheckingInputs) {
-  //   checkInputs();
-  // }
 }
 
-//messageInput.addEventListener('input', checkInputs);
 emailInput.addEventListener('blur', validateEmail);
-// emailInput.addEventListener('input', function () {
-//   if (emailRegex.test(emailInput.value) && emailErrorElement.classList.contains('visible')) {
-//     emailErrorElement.classList.remove('visible');
-//     emailInput.classList.remove('input-not-valid');
-//     emailErrorElement.textContent = '';
-//   }
-//   checkInputs();
-// });
-// emailInput.addEventListener('input', function () {
-//   validateEmail();
-// });
-//emailInput.addEventListener('input', validateEmail);
 emailInput.addEventListener('input', function () {
   if (emailRegex.test(emailInput.value)) {
     emailErrorElement.classList.remove('visible');
@@ -242,35 +205,21 @@ messageInput.addEventListener('blur', function () {
     messageInput.classList.remove('input-not-valid');
   }
 });
-// messageInput.addEventListener('input', function () {
-//   validateMessage();
-// });
-//messageInput.addEventListener('input', validateMessage);
+
 messageInput.addEventListener('input', function () {
-  if (messageInput.value.trim() !== '') {
+	let messageValue = messageInput.value.trim();
+  if (messageValue !== '') {
     messageErrorElement.classList.remove('visible');
     messageInput.classList.remove('input-not-valid');
+  } else {
+  	messageErrorElement.classList.add('visible');
+    messageInput.classList.add('input-not-valid');
   }
   checkInputs();
 });
 
-// messageInput.addEventListener('input', function () {
-//   if (messageInput.value.trim() !== '' && messageErrorElement.classList.contains('visible')) {
-//     messageErrorElement.classList.remove('visible');
-//     messageInput.classList.remove('input-not-valid');
-
-//   }
-//   checkInputs();
-// });
-
-// form.addEventListener('submit', (e) => {
-//   if (!form.checkValidity()) {
-//     e.preventDefault();
-//     checkInputs();
-//   }
-// });
 form.addEventListener('submit', (e) => {
-  e.preventDefault(); // Всегда предотвращаем отправку формы по умолчанию
+  e.preventDefault();
   checkInputs();
 });
 </script>
