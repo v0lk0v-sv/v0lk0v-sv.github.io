@@ -120,9 +120,11 @@
     document.getElementById('action-sheet').classList.remove('action-sheet-visible');
     document.getElementById('mask').classList.remove('mask-visible');
     document.body.classList.remove('body-no-scroll');
-    if (currentDeleteIndex !== -1) {
+    if (currentDeleteIndex !== -1 && currentDeleteIndex < forms.length) {
       const form = forms[currentDeleteIndex];
-      updateVisibilityOfDiv(form);
+      if (form) {
+        updateVisibilityOfDiv(form);
+      }
     }
   }
   
@@ -202,6 +204,9 @@
   let isMessageTouched = false;
   
   var emailInputLabel = document.getElementById('in-label-email');
+  if (emailInput.value.trim() !== '') {
+      emailInputLabel.classList.add('in-label-active-qr-pf');
+  }
   
   emailInput.addEventListener('focus', function() {
     emailInputLabel.classList.add('in-label-active-qr-pf');
@@ -209,10 +214,12 @@
   
   emailInput.addEventListener('blur', function () {
     isEmailTouched = true;
-    validateEmail();
+    checkInputs();
+    //validateEmail();
     if (emailInput.value.trim() === '') {
       emailInputLabel.classList.remove('in-label-active-qr-pf');
     }
+    checkInputs();
   });
   
   //TEST HERE
@@ -239,6 +246,7 @@
       messageErrorElement.classList.remove('visible');
       messageInput.classList.remove('input-not-valid');
     }
+    checkInputs();
   });
   
   //TEST HERE
@@ -250,21 +258,21 @@
   //});
   
   //TEST HERE
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (checkInputs()) {
-      const elem = event.currentTarget;
-      const formData = new FormData(elem);
+  //form.addEventListener('submit', (event) => {
+    //event.preventDefault();
+    //if (checkInputs()) {
+      //const elem = event.currentTarget;
+      //const formData = new FormData(elem);
   
-      fetch('https://d1ptr5r57ihvqc.cloudfront.net/webhook', {
-          method: 'POST',
-          body: formData
-      })
-      .finally(() => {
-        window.location.href = '/robot/feedback-success';
-      });
-    }
-  });
+      //fetch('https://d1ptr5r57ihvqc.cloudfront.net/webhook', {
+          //method: 'POST',
+          //body: formData
+      //})
+      //.finally(() => {
+        //window.location.href = '/robot/feedback-success';
+      //});
+    //}
+  //});
   
   var nameInput = document.getElementById('name');
   var nameInputLabel = document.getElementById('in-label-name');
@@ -278,4 +286,15 @@
       nameInputLabel.classList.remove('in-label-active-qr-pf');
     }
   });
+  window.onload = function() {
+    if (nameInput.value !== '') {
+      nameInputLabel.classList.add('in-label-active-qr-pf');
+    };
+    if (messageInput.value !== '') {
+      messageInputLabel.classList.add('in-label-active-qr-pf');
+    };
+    if (emailInput.value !== '') {
+      emailInputLabel.classList.add('in-label-active-qr-pf');
+    };
+  };
   </script>
