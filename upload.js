@@ -2229,7 +2229,7 @@ __p+='`),
         var JT = je()
           , eb = 0
           , tb = Math.random()
-          , rb = JT(1.toString);
+          , rb = JT((1).toString());
         nc.exports = function(e) {
             return "Symbol(" + (e === void 0 ? "" : e) + ")_" + rb(++eb + tb, 36)
         }
